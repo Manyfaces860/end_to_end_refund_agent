@@ -25,10 +25,6 @@ jobs:
 
       - name: Fetch Active Image Tags from State
         id: active-state
-        # 👇 Added explicit step-level output mapping declarations
-        outputs:
-          BACKEND: ${{ steps.parse-tags.outputs.BACKEND }}
-          FRONTEND: ${{ steps.parse-tags.outputs.FRONTEND }}
         run: |
           # Read raw JSON outputs to completely bypass the multi-line warning format bug
           BACKEND_RAW=$(terraform output -json backend_image 2>/dev/null | jq -r '.' || echo "placeholder")
@@ -40,11 +36,9 @@ jobs:
 
           echo "BACKEND=$BACKEND_RAW" >> $GITHUB_OUTPUT
           echo "FRONTEND=$FRONTEND_RAW" >> $GITHUB_OUTPUT
-        id: parse-tags
         working-directory: ./terraform
 
       - name: Terraform Apply
-        # 👇 Removed the empty project_id flag completely so it smoothly defaults to your variables.tf string
         run: |
           terraform apply -auto-approve \
             -var="backend_image=${{ inputs.backend_image != 'use-active-state' && inputs.backend_image || steps.active-state.outputs.BACKEND }}" \
