@@ -12,7 +12,12 @@ from logger import logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
+    try:
+        logger.info("Connecting to databases via init_db()...")
+        await init_db()
+        logger.info("Databases connected successfully!")
+    except Exception as e:
+        logger.error(f"🚨 CRITICAL: init_db failed on startup, but forcing boot anyway: {e}")
     yield
 
 app = FastAPI(lifespan=lifespan)
