@@ -1,0 +1,49 @@
+# === Byte-compile caches ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# === Virtual Environments ===
+.venv/
+venv/
+ENV/
+env/
+target/
+
+# === Environment & Secrets ===
+*.pem
+*.key
+*.cert
+gcp_key.json
+.env
+
+
+# === IDEs and Text Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+
+# === Testing and Coverage ===
+.pytest_cache/
+.coverage
+htmlcov/
+flake8/
+test/
+
+
+# === OS Generated Files ===
+.DS_Store
+Thumbs.db
+
+# === Git ===
+.git/
+.gitignore
+
+# === Local Data / Application Logs ===
+*.log
+logs/
+data/

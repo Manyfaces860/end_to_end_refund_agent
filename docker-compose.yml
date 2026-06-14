@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PORT=8000
+      # Pass through any environment variables your Agent SDK requires
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_key.json
+    restart: always
+
+  frontend:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./frontend:/app
+        # Skip mounting node_modules to avoid host OS synchronization conflicts
+        - /app/node_modules
+        - /app/.next
+      environment:
+        - NEXT_PUBLIC_API_URL=http://backend:8000
+      restart: always
+      depends_on:
+        - backend
