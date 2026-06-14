@@ -27,12 +27,13 @@ jobs:
         id: active-state
         run: |
           # Read raw JSON outputs to completely bypass the multi-line warning format bug
-          BACKEND_RAW=$(terraform output -json backend_image 2>/dev/null | jq -r '.' || echo "placeholder")
-          FRONTEND_RAW=$(terraform output -json frontend_image 2>/dev/null | jq -r '.' || echo "placeholder")
+          # If it fails (meaning first run), default to a valid, lightweight public public image
+          BACKEND_RAW=$(terraform output -json backend_image 2>/dev/null | jq -r '.' || echo "mirror.gcr.io/library/nginx:alpine")
+          FRONTEND_RAW=$(terraform output -json frontend_image 2>/dev/null | jq -r '.' || echo "mirror.gcr.io/library/nginx:alpine")
 
-          # Fallback to placeholder if string is empty, null, or missing
-          if [ -z "$BACKEND_RAW" ] || [ "$BACKEND_RAW" = "null" ] || [ "$BACKEND_RAW" = "{}" ]; then BACKEND_RAW="placeholder"; fi
-          if [ -z "$FRONTEND_RAW" ] || [ "$FRONTEND_RAW" = "null" ] || [ "$FRONTEND_RAW" = "{}" ]; then FRONTEND_RAW="placeholder"; fi
+          # Fallback if string is empty, null, or missing
+          if [ -z "$BACKEND_RAW" ] || [ "$BACKEND_RAW" = "null" ] || [ "$BACKEND_RAW" = "{}" ]; then BACKEND_RAW="mirror.gcr.io/library/nginx:alpine"; fi
+          if [ -z "$FRONTEND_RAW" ] || [ "$FRONTEND_RAW" = "null" ] || [ "$FRONTEND_RAW" = "{}" ]; then FRONTEND_RAW="mirror.gcr.io/library/nginx:alpine"; fi
 
           echo "BACKEND=$BACKEND_RAW" >> $GITHUB_OUTPUT
           echo "FRONTEND=$FRONTEND_RAW" >> $GITHUB_OUTPUT
