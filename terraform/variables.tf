@@ -1,5 +1,6 @@
 variable "project_id" {
   type        = string
+  default     = "gen-lang-client-0916506621"
   description = "The GCP Project ID where resources will be deployed"
 }
 
@@ -18,4 +19,3 @@ variable "frontend_image" {
   type        = string
   description = "The fully qualified Artifact Registry path for the frontend image"
 }
-gen-lang-client-0916506621
