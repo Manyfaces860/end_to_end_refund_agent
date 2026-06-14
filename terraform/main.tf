@@ -136,3 +136,8 @@ resource "google_cloud_run_v2_service_iam_member" "frontend_public" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
+import {
+  to = google_artifact_registry_repository.my_repo
+  id = "projects/gen-lang-client-0916506621/locations/us-central1/repositories/worknoon-repo"
+}
