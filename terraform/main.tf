@@ -141,3 +141,13 @@ import {
   to = google_artifact_registry_repository.my_repo
   id = "projects/gen-lang-client-0916506621/locations/us-central1/repositories/worknoon-repo"
 }
+
+output "backend_image" {
+  value       = google_cloud_run_v2_service.backend.template[0].containers[0].image
+  description = "The active backend container image tag"
+}
+
+output "frontend_image" {
+  value       = google_cloud_run_v2_service.frontend.template[0].containers[0].image
+  description = "The active frontend container image tag"
+}
