@@ -10,20 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+          
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.0
 
-      # Download active configuration state to avoid placeholders overwriting live assets
       - name: Terraform Init
         run: terraform init
         working-directory: ./terraform
 
       - name: Fetch Active Image Tags from State
         id: active-state
+        # 👇 Added explicit step-level output mapping declarations
+        outputs:
+          BACKEND: ${{ steps.parse-tags.outputs.BACKEND }}
+          FRONTEND: ${{ steps.parse-tags.outputs.FRONTEND }}
         run: |
           # Read raw JSON outputs to completely bypass the multi-line warning format bug
           BACKEND_RAW=$(terraform output -json backend_image 2>/dev/null | jq -r '.' || echo "placeholder")
@@ -35,12 +40,13 @@ jobs:
 
           echo "BACKEND=$BACKEND_RAW" >> $GITHUB_OUTPUT
           echo "FRONTEND=$FRONTEND_RAW" >> $GITHUB_OUTPUT
+        id: parse-tags
         working-directory: ./terraform
 
       - name: Terraform Apply
+        # 👇 Removed the empty project_id flag completely so it smoothly defaults to your variables.tf string
         run: |
           terraform apply -auto-approve \
-            -var="project_id=${{ vars.TF_VAR_project_id }}" \
             -var="backend_image=${{ inputs.backend_image != 'use-active-state' && inputs.backend_image || steps.active-state.outputs.BACKEND }}" \
             -var="frontend_image=${{ inputs.frontend_image != 'use-active-state' && inputs.frontend_image || steps.active-state.outputs.FRONTEND }}"
         working-directory: ./terraform
