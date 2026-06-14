@@ -26,9 +26,32 @@ variable "base_url"          { type = string }
 variable "mongo_db_name"     { type = string }
 
 # === Sensitive Secrets ===
-variable "langfuse_public_key" { type = string; sensitive = true }
-variable "langfuse_secret_key" { type = string; sensitive = true }
-variable "vdb_key"             { type = string; sensitive = true }
-variable "redis_api_key"       { type = string; sensitive = true }
-variable "redis_url"           { type = string; sensitive = true }
-variable "mongo_uri"           { type = string; sensitive = true }
+variable "langfuse_public_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "langfuse_secret_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "vdb_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "redis_api_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "redis_url" {
+  type      = string
+  sensitive = true
+}
+
+variable "mongo_uri" {
+  type      = string
+  sensitive = true
+}
