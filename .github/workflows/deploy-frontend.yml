@@ -1,11 +1,11 @@
-name: Deploy Backend
+name: Deploy Frontend
 on:
   push:
     branches: [ main ]
-    paths: [ 'backend/**' ]
+    paths: [ 'frontend/**' ]
 
 jobs:
-  build-backend:
+  build-frontend:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.meta.outputs.tag }}
@@ -19,15 +19,17 @@ jobs:
       - name: Build and Push
         id: meta
         run: |
-          TAG="us-central1-docker.pkg.dev/${{ vars.PROJECT_ID }}/worknoon-repo/backend:${{ github.sha }}"
-          docker build -t $TAG ./backend
+          TAG="us-central1-docker.pkg.dev/${{ vars.PROJECT_ID }}/worknoon-repo/frontend:${{ github.sha }}"
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="https://worknoon-backend-${{ vars.PROJECT_ID }}.a.run.app" \
+            -t $TAG ./frontend
           docker push $TAG
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
   trigger-infra:
-    needs: build-backend
+    needs: build-frontend
     uses: ./.github/workflows/terraform-apply.yml
     with:
-      backend_image: ${{ needs.build-backend.outputs.tag }}
-      frontend_image: 'use-active-state' # ◄ Tells Terraform to reuse what is already live
+      backend_image: 'use-active-state' # ◄ Tells Terraform to reuse what is already live
+      frontend_image: ${{ needs.build-frontend.outputs.tag }}
     secrets: inherit

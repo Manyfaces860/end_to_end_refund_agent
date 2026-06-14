@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = "terrabucket"
+    bucket = "worknoon-terraform-state-bucket"
     prefix = "terraform/state"
   }
 }
@@ -56,6 +56,43 @@ resource "google_cloud_run_v2_service" "backend" {
       }
 
       env {
+        name  = "LANGFUSE_BASE_URL"
+        value = var.langfuse_base_url
+      }
+      env {
+        name  = "BASE_URL"
+        value = var.base_url
+      }
+      env {
+        name  = "MONGO_DB_NAME"
+        value = var.mongo_db_name
+      }
+      env {
+        name  = "LANGFUSE_PUBLIC_KEY"
+        value = var.langfuse_public_key
+      }
+      env {
+        name  = "LANGFUSE_SECRET_KEY"
+        value = var.langfuse_secret_key
+      }
+      env {
+        name  = "VDB_KEY"
+        value = var.vdb_key
+      }
+      env {
+        name  = "REDIS_API_KEY"
+        value = var.redis_api_key
+      }
+      env {
+        name  = "REDIS_URL"
+        value = var.redis_url
+      }
+      env {
+        name  = "MONGO_URI"
+        value = var.mongo_uri
+      }
+
+      env {
         name  = "GOOGLE_CLOUD_PROJECT"
         value = var.project_id
       }
@@ -84,10 +121,6 @@ resource "google_cloud_run_v2_service" "frontend" {
   template {
     containers {
       image = var.frontend_image
-      env {
-        name  = "NEXT_PUBLIC_API_URL"
-        value = google_cloud_run_v2_service.backend.uri
-      }
     }
   }
 

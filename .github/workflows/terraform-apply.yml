@@ -1,0 +1,48 @@
+name: Shared Infrastructure Layer
+on:
+  workflow_call:
+    inputs:
+      backend_image:  { type: string, required: true }
+      frontend_image: { type: string, required: true }
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.0
+
+      # Download active configuration state to avoid placeholders overwriting live assets
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Fetch Active Image Tags from State
+        id: active-state
+        run: |
+          echo "BACKEND=$(terraform output -raw backend_image 2>/dev/null || echo 'placeholder')" >> $GITHUB_OUTPUT
+          echo "FRONTEND=$(terraform output -raw frontend_image 2>/dev/null || echo 'placeholder')" >> $GITHUB_OUTPUT
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve \
+            -var="project_id=${{ vars.TF_VAR_project_id }}" \
+            -var="backend_image=${{ inputs.backend_image != 'use-active-state' && inputs.backend_image || steps.active-state.outputs.BACKEND }}" \
+            -var="frontend_image=${{ inputs.frontend_image != 'use-active-state' && inputs.frontend_image || steps.active-state.outputs.FRONTEND }}"
+        working-directory: ./terraform
+        env:
+          TF_VAR_langfuse_public_key: ${{ secrets.TF_VAR_langfuse_public_key }}
+          TF_VAR_langfuse_secret_key: ${{ secrets.TF_VAR_langfuse_secret_key }}
+          TF_VAR_vdb_key:             ${{ secrets.TF_VAR_vdb_key }}
+          TF_VAR_redis_api_key:       ${{ secrets.TF_VAR_redis_api_key }}
+          TF_VAR_redis_url:           ${{ secrets.TF_VAR_redis_url }}
+          TF_VAR_mongo_uri:           ${{ secrets.TF_VAR_mongo_uri }}
+          TF_VAR_langfuse_base_url:   ${{ vars.TF_VAR_langfuse_base_url }}
+          TF_VAR_base_url:            ${{ vars.TF_VAR_base_url }}
+          TF_VAR_mongo_db_name:       ${{ vars.TF_VAR_mongo_db_name }}

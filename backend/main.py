@@ -3,6 +3,7 @@ from random import Random
 from fastapi import FastAPI, responses
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import os
 import uvicorn
 from call_agent import agent_loop
 from typing import Optional
@@ -15,14 +16,19 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+allow_origins = [
+    "http://localhost:3000",  # Next.js local development
+    "http://localhost:5173",  # Vite local development
+]
 
+# ☁️ Dynamically pull the production frontend URL if it exists in the environment
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allow_origins.append(frontend_url)
+    
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # Next.js dev server
-        "http://localhost:5173",  # Vite dev server
-        # Add your production frontend URL here
-    ],
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,11 +45,6 @@ def health():
 @app.post("/query")
 async def query(request: QueryRequest):
     logger.info(f"request params: query: {request.query}, session_key: {request.session_key}")
-    # result = {
-    #     "message" : 'hi',
-    #     "refund" : "denied",
-    #     "session_key" : str(Random().randint(10000, 30000))
-    # }
     result = await agent_loop(
         query=request.query,
         session_key=request.session_key
@@ -52,4 +53,5 @@ async def query(request: QueryRequest):
     return responses.JSONResponse(content=result)
 
 if __name__ == '__main__':
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
