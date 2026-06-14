@@ -1,0 +1,85 @@
+name: Unified Monorepo Deployment
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'terraform/**'
+  workflow_dispatch: # Allows manual one-click trigger via the GitHub UI
+
+jobs:
+  build-containers:
+    runs-on: ubuntu-latest
+    outputs:
+      backend_tag: ${{ steps.meta-backend.outputs.tag }}
+      frontend_tag: ${{ steps.meta-frontend.outputs.tag }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and Push Backend Image
+        id: meta-backend
+        run: |
+          TAG="us-central1-docker.pkg.dev/${{ vars.PROJECT_ID }}/worknoon-repo/backend:${{ github.sha }}"
+          docker build -t $TAG ./backend
+          docker push $TAG
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Build and Push Frontend Image
+        id: meta-frontend
+        run: |
+          TAG="us-central1-docker.pkg.dev/${{ vars.PROJECT_ID }}/worknoon-repo/frontend:${{ github.sha }}"
+          # 💡 FIXED: Now cleanly dynamically injected from your GitHub Repository Variables
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="${{ vars.NEXT_PUBLIC_API_URL }}" \
+            -t $TAG ./frontend
+          docker push $TAG
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+  deploy-infrastructure:
+    needs: build-containers
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.0"
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve \
+            -var="backend_image=${{ needs.build-containers.outputs.backend_tag }}" \
+            -var="frontend_image=${{ needs.build-containers.outputs.frontend_tag }}"
+        working-directory: ./terraform
+        env:
+          TF_VAR_langfuse_public_key: ${{ secrets.TF_VAR_langfuse_public_key }}
+          TF_VAR_langfuse_secret_key: ${{ secrets.TF_VAR_langfuse_secret_key }}
+          TF_VAR_vdb_key:             ${{ secrets.TF_VAR_vdb_key }}
+          TF_VAR_redis_api_key:       ${{ secrets.TF_VAR_redis_api_key }}
+          TF_VAR_redis_url:           ${{ secrets.TF_VAR_redis_url }}
+          TF_VAR_mongo_uri:           ${{ secrets.TF_VAR_mongo_uri }}
+          TF_VAR_langfuse_base_url:   ${{ vars.TF_VAR_langfuse_base_url }}
+          TF_VAR_base_url:            ${{ vars.TF_VAR_base_url }}
+          TF_VAR_mongo_db_name:       ${{ vars.TF_VAR_mongo_db_name }}
