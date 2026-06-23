@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/OpenAI_Agents-SDK-412991?style=flat-square&logo=openai&logoColor=white" alt="OpenAI Agents SDK" />
   <img src="https://img.shields.io/badge/Pinecone-Hybrid_Search-000000?style=flat-square" alt="Pinecone" />
   <img src="https://img.shields.io/badge/MongoDB-Beanie-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB and Beanie" />
-  <img src="https://img.shields.io/badge/Setup-Cloud-Infrastructure?style=flat-square&logo=terraform" alt="Terraform" />
+  <img src="https://img.shields.io/badge/Terraform-Setup-Cloud?style=flat-square&logo=terraform" alt="Terraform" />
   <img src="https://img.shields.io/badge/Redis-Session_State-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis" />
   <img src="https://img.shields.io/badge/Langfuse-Observability-F9A825?style=flat-square" alt="Langfuse" />
   <img src="https://img.shields.io/badge/Next.js-Frontend-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js" />
