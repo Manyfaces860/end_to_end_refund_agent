@@ -2,23 +2,35 @@
 
 # 🤖 AuraGear AI Refund Agent
 
-### A production-oriented customer-support agent for evaluating refund requests with RAG, structured decisioning, guardrails, and observability
+### Production-oriented refund automation with hybrid RAG, structured decisioning, guardrails, and observability
 
 <p>
-  <img src="https://img.shields.io/badge/FastAPI-0.136-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/OpenAI_Agents_SDK-0.16-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI Agents SDK" />
-  <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
-  <img src="https://img.shields.io/badge/MongoDB-Beanie-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB and Beanie" />
-  <img src="https://img.shields.io/badge/Pinecone-Hybrid_Search-000000?style=for-the-badge" alt="Pinecone hybrid search" />
-  <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  <a href="https://drive.google.com/file/d/1IsBMHvM7bE1eF3cGJreJt_27cZf64qxC/view?usp=sharing">
+    <img src="https://img.shields.io/badge/▶_Watch_Video_Demo-Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Watch the video demo" />
+  </a>
+  <a href="https://github.com/Manyfaces860/end_to_end_refund_agent">
+    <img src="https://img.shields.io/badge/View_Repository-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="View repository" />
+  </a>
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/OpenAI_Agents-SDK-412991?style=flat-square&logo=openai&logoColor=white" alt="OpenAI Agents SDK" />
+  <img src="https://img.shields.io/badge/Pinecone-Hybrid_Search-000000?style=flat-square" alt="Pinecone" />
+  <img src="https://img.shields.io/badge/MongoDB-Beanie-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB and Beanie" />
+  <img src="https://img.shields.io/badge/Setup-Cloud-Infrastructure?style=flat-square&logo=terraform" alt="Terraform" />
+  <img src="https://img.shields.io/badge/Redis-Session_State-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis" />
+  <img src="https://img.shields.io/badge/Langfuse-Observability-F9A825?style=flat-square" alt="Langfuse" />
+  <img src="https://img.shields.io/badge/Next.js-Frontend-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
 </p>
 
 <p>
   <a href="#-overview">Overview</a> •
-  <a href="#-key-capabilities">Capabilities</a> •
+  <a href="#-demo">Demo</a> •
+  <a href="#-core-capabilities">Capabilities</a> •
   <a href="#-architecture">Architecture</a> •
-  <a href="#-getting-started">Getting started</a> •
-  <a href="#-deployment">Deployment</a>
+  <a href="#-getting-started">Getting started</a>
 </p>
 
 </div>
@@ -27,175 +39,324 @@
 
 ## 🌍 Overview
 
-**AuraGear AI Refund Agent** is a full-stack customer-support system that evaluates refund requests using a combination of:
+**AuraGear AI Refund Agent** is a full-stack customer-support system that evaluates refund requests using a controlled combination of:
 
 - large-language-model reasoning
-- explicit business rules
+- explicit refund rules
 - retrieval-augmented generation
 - structured output schemas
+- programmatic tools
 - input and output guardrails
 - persistent conversation state
-- observability and tracing
+- execution tracing and observability
 
-The system is designed around a fictional commerce organisation named **AuraGear**. It demonstrates how an AI agent can support sensitive business workflows without relying on unrestricted free-form generation.
+The project is built around a fictional commerce organisation named **AuraGear**.
 
-Rather than acting like a general chatbot, the agent gathers missing information, retrieves the relevant policy, checks order and customer data, applies refund constraints, and produces a controlled decision.
+Instead of behaving like a general-purpose chatbot, the agent follows a structured workflow:
 
----
-
-## ✨ Key capabilities
-
-### 🧠 Agent-based refund evaluation
-
-The backend uses the OpenAI Agents SDK to coordinate reasoning, tools, policy retrieval, and structured decision generation.
-
-### 🔍 Hybrid policy retrieval
-
-Refund policies are retrieved from Pinecone using hybrid search so the system can combine semantic similarity with keyword relevance.
-
-### 🧾 Structured decisions
-
-The agent returns controlled outcomes such as:
-
-- `APPROVED`
-- `DENIED`
-- `ESCALATE`
-- `NEEDS_MORE_INFORMATION`
-
-The response can also include:
-
-- customer-facing explanation
-- reasoning summary
-- refund amount
-- restocking fee
-- updated conversation summary
-
-### 🛡️ Guardrails
-
-Input and output guardrails protect the workflow from:
-
-- prompt manipulation
-- unsupported actions
-- malformed responses
-- policy-breaking decisions
-- unsafe or irrelevant requests
-
-### 🧰 Programmatic tools
-
-The agent can use application tools to retrieve policy information and work with customer, product, and order data instead of inventing facts.
-
-### 💬 Session-aware conversations
-
-Conversation state is maintained across requests so users can provide missing details over multiple turns.
-
-### 📊 Observability
-
-The backend includes OpenInference, OpenTelemetry, and Langfuse dependencies for tracing:
-
-- agent runs
-- tool calls
-- latency
-- token usage
-- execution failures
-- decision behaviour
-
-### 🐳 Full-stack containerisation
-
-The frontend and backend run as separate Docker services and can be started together with Docker Compose.
+1. understand the customer request
+2. gather missing information
+3. retrieve the relevant refund policy
+4. inspect customer, order, and product data
+5. apply business constraints
+6. return a controlled decision
+7. escalate high-risk cases to a human
 
 ---
 
-## 🏛️ Business rules represented
+## 🎥 Demo
 
-The system is designed to handle rules such as:
+<div align="center">
 
-| Rule | Behaviour |
+### Watch the complete application walkthrough
+
+<a href="https://drive.google.com/file/d/1IsBMHvM7bE1eF3cGJreJt_27cZf64qxC/view?usp=sharing">
+  <img src="https://img.shields.io/badge/▶_OPEN_VIDEO_DEMO-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Open AuraGear AI Refund Agent video demo" />
+</a>
+
+<br/><br/>
+
+The demo shows the customer chat experience, multi-turn refund handling, policy-grounded decisions, and the end-to-end agent workflow.
+
+</div>
+
+> GitHub does not directly play Google Drive videos inside a README, so the button opens the demo in Google Drive.
+
+---
+
+## ✨ Core capabilities
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🧠 Agentic decisioning
+
+Uses the OpenAI Agents SDK to coordinate reasoning, tool usage, policy retrieval, and structured refund decisions.
+
+</td>
+<td width="50%" valign="top">
+
+### 🔍 Hybrid RAG
+
+Retrieves policy context using dense semantic retrieval and keyword-aware search through Pinecone.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### 🛡️ Input and output guardrails
+
+Checks user requests before execution and validates agent responses before they reach the customer.
+
+</td>
+<td width="50%" valign="top">
+
+### 🧾 Structured outputs
+
+Produces controlled decisions such as approved, denied, escalated, or more information required.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### 💬 Stateful conversations
+
+Maintains session context so customers can provide missing details over multiple messages.
+
+</td>
+<td width="50%" valign="top">
+
+### 📊 Full observability
+
+Traces model calls, agent runs, tool execution, latency, token usage, and failures through Langfuse and OpenTelemetry-compatible instrumentation.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏛️ Refund decisions
+
+The agent returns one of four controlled outcomes:
+
+| Decision | Meaning |
 |---|---|
-| Standard return window | Refund eligibility is checked against delivery date |
-| Black November purchases | Extended window with a possible restocking fee |
-| Final-sale products | Refund denied |
-| Opened or activated software | Refund denied |
-| Customer-caused damage | Refund denied |
-| High-value refund | Escalated for manual review |
-| Flagged customer | Escalated for manual review |
-| Missing order information | Agent asks for more information |
+| `APPROVED` | The request satisfies the refund policy |
+| `DENIED` | The request violates one or more policy conditions |
+| `ESCALATE` | The request requires human review |
+| `NEEDS_MORE_INFORMATION` | The agent cannot decide safely without more details |
 
-These checks ensure that the model works inside a defined business process instead of making unrestricted financial decisions.
+A structured result can include:
+
+```json
+{
+  "decision": "ESCALATE",
+  "customer_message": "Your request requires manual review.",
+  "reasoning_summary": "The order exceeds the automatic refund threshold.",
+  "refund_amount": null,
+  "restocking_fee": null,
+  "conversation_summary": "Customer requested a refund for order AG-1024."
+}
+```
+
+---
+
+## 📋 Business rules represented
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### ✅ Eligibility checks
+
+- standard return window
+- delivery-date validation
+- Black November extension
+- eligible order status
+- product condition checks
+
+</td>
+<td width="50%" valign="top">
+
+### 🚫 Automatic denial
+
+- final-sale products
+- opened or activated software
+- customer-caused damage
+- expired refund window
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### ⚠️ Human escalation
+
+- high-value refund requests
+- flagged customer accounts
+- ambiguous policy conflicts
+- sensitive transaction cases
+
+</td>
+<td width="50%" valign="top">
+
+### ❓ Information gathering
+
+- missing order number
+- missing delivery date
+- unclear damage status
+- incomplete product details
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🧱 Architecture
 
-```text
-┌──────────────────────────────┐
-│ Next.js customer chat UI     │
-└──────────────┬───────────────┘
-               │ HTTP
-               ▼
-┌──────────────────────────────┐
-│ FastAPI backend              │
-│                              │
-│ • Session handling           │
-│ • Request validation         │
-│ • Agent orchestration        │
-│ • Structured responses       │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ Refund decision agent        │
-│                              │
-│ • Input guardrail            │
-│ • Business-rule reasoning    │
-│ • Tool calling               │
-│ • Output guardrail           │
-└───────┬─────────┬────────────┘
-        │         │
-        │         ├──────────────────────┐
-        ▼         ▼                      ▼
-┌────────────┐ ┌──────────────┐ ┌─────────────────┐
-│ Pinecone   │ │ MongoDB      │ │ Redis / session │
-│ policies   │ │ order data   │ │ state           │
-└────────────┘ └──────────────┘ └─────────────────┘
-        │
-        ▼
-┌──────────────────────────────┐
-│ Langfuse / OpenTelemetry     │
-│ tracing and observability    │
-└──────────────────────────────┘
+```mermaid
+flowchart TD
+    A[Customer Chat UI<br/>Next.js] --> B[FastAPI Backend]
+    B --> C[Input Guardrail]
+    C --> D[Refund Agent]
+    D --> E[Policy Retrieval Tool]
+    D --> F[Order and Customer Tools]
+    D --> G[Conversation Memory]
+
+    E --> H[(Pinecone)]
+    F --> I[(MongoDB)]
+    G --> J[(Redis)]
+
+    D --> K[Structured Decision]
+    K --> L[Output Guardrail]
+    L --> M[Customer Response]
+
+    D --> N[OpenInference / OpenTelemetry]
+    N --> O[Langfuse Observability]
+```
+
+### Component view
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### Frontend
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- conversational chat UI
+
+</td>
+<td width="33%" valign="top">
+
+### Backend
+
+- FastAPI
+- OpenAI Agents SDK
+- Pydantic schemas
+- Beanie ODM
+- tool orchestration
+- guardrail execution
+
+</td>
+<td width="33%" valign="top">
+
+### Infrastructure
+
+- MongoDB
+- Redis
+- Pinecone
+- Docker Compose
+- Terraform
+- Google Cloud
+- Langfuse
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🔄 End-to-end request flow
+
+```mermaid
+sequenceDiagram
+    participant U as Customer
+    participant UI as Next.js UI
+    participant API as FastAPI
+    participant G as Guardrail
+    participant A as Refund Agent
+    participant P as Pinecone
+    participant DB as MongoDB
+    participant R as Redis
+    participant O as Observability
+
+    U->>UI: Submit refund request
+    UI->>API: POST /query
+    API->>G: Validate input
+    G->>R: Load session context
+    G->>A: Forward validated request
+    A->>P: Retrieve refund policy
+    A->>DB: Fetch order and customer data
+    A->>A: Apply rules and reason
+    A->>O: Trace model and tool execution
+    A->>G: Return structured decision
+    G->>API: Validate final output
+    API->>R: Update session
+    API->>UI: Return response
+    UI->>U: Display decision
 ```
 
 ---
 
-## 🔄 Request flow
+## 🧰 Tooling and safeguards
 
-```text
-Customer message
-      │
-      ▼
-Input validation and guardrail
-      │
-      ▼
-Load session and conversation context
-      │
-      ▼
-Retrieve relevant refund policy
-      │
-      ▼
-Fetch order, product, and customer data
-      │
-      ▼
-Apply policy and business constraints
-      │
-      ▼
-Generate structured refund decision
-      │
-      ▼
-Output validation and guardrail
-      │
-      ▼
-Return customer-facing response
-```
+### Agent tools
+
+The agent can use explicit programmatic tools for:
+
+- policy retrieval
+- order lookup
+- customer lookup
+- product inspection
+- eligibility checks
+- refund calculation
+- escalation handling
+
+### Guardrails
+
+The system is designed to detect and block:
+
+- prompt injection attempts
+- attempts to override refund policy
+- unrelated or unsupported requests
+- malformed structured output
+- unsafe financial actions
+- hallucinated order information
+
+### Observability
+
+The tracing layer can monitor:
+
+- model latency
+- tool-call duration
+- token consumption
+- retrieved policy context
+- guardrail failures
+- decision distribution
+- escalation frequency
+- execution errors
 
 ---
 
@@ -203,16 +364,15 @@ Return customer-facing response
 
 | Layer | Technology |
 |---|---|
-| Backend API | FastAPI, Uvicorn |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| Backend | FastAPI, Uvicorn, Pydantic |
 | Agent framework | OpenAI Agents SDK |
-| Validation | Pydantic |
 | Database | MongoDB, Motor, Beanie |
-| Session and caching | Redis |
-| Vector retrieval | Pinecone |
+| Session state | Redis |
+| Retrieval | Pinecone hybrid search |
 | LLM integration | OpenAI |
-| Frontend | Next.js 16, React 19, TypeScript |
-| Styling | Tailwind CSS |
 | Observability | Langfuse, OpenInference, OpenTelemetry |
+| Testing | Pytest |
 | Containers | Docker, Docker Compose |
 | Infrastructure | Terraform, Google Cloud |
 
@@ -221,44 +381,48 @@ Return customer-facing response
 ## 📂 Repository structure
 
 ```text
-.
+end_to_end_refund_agent/
 ├── backend/
-│   ├── agents/              Agent definitions and orchestration
-│   ├── guardrails/          Input and output validation
-│   ├── models/              Database and response models
-│   ├── routes/              FastAPI endpoints
-│   ├── services/            Business and persistence services
-│   ├── tools/               Agent-callable programmatic tools
+│   ├── agents/               Agent definitions and orchestration
+│   ├── guardrails/           Input and output guardrails
+│   ├── models/               Database and response schemas
+│   ├── routes/               FastAPI endpoints
+│   ├── services/             Application and business services
+│   ├── tools/                Agent-callable tools
+│   ├── tests/                Backend test suite
 │   ├── Dockerfile
 │   └── requirements.txt
 │
 ├── frontend/
-│   ├── app/                 Next.js application routes
-│   ├── components/          Chat and interface components
+│   ├── app/                  Next.js application routes
+│   ├── components/           Chat and UI components
 │   ├── Dockerfile
 │   └── package.json
 │
-├── terraform/               Cloud infrastructure definitions
+├── terraform/                Infrastructure-as-code
 ├── docker-compose.yml
 └── README.md
 ```
 
-> The exact internal folder names may evolve as the project is developed, but the repository is organised around separate backend, frontend, and infrastructure layers.
-
 ---
 
-## 🔌 API contract
+## 🔌 API usage
 
-The primary chat endpoint follows this general request shape:
+### Request
+
+```http
+POST /query
+Content-Type: application/json
+```
 
 ```json
 {
-  "query": "I want a refund for order AG-1024",
+  "query": "I want a refund for order AG-1024.",
   "session_key": "optional-existing-session-key"
 }
 ```
 
-Example response:
+### Response
 
 ```json
 {
@@ -272,7 +436,11 @@ Example response:
 }
 ```
 
-The exact schema may include additional structured decision and conversation fields.
+Interactive API documentation is available at:
+
+```text
+http://localhost:8000/docs
+```
 
 ---
 
@@ -282,16 +450,16 @@ The exact schema may include additional structured decision and conversation fie
 
 Install:
 
+- Git
 - Docker
 - Docker Compose
-- Git
 
-You will also need credentials for the services enabled in your environment, such as:
+You will also need credentials for the services enabled in your environment:
 
 - OpenAI
 - MongoDB
-- Pinecone
 - Redis
+- Pinecone
 - Langfuse
 - Google Cloud
 
@@ -302,11 +470,11 @@ git clone https://github.com/Manyfaces860/end_to_end_refund_agent.git
 cd end_to_end_refund_agent
 ```
 
-### Configure environment variables
+### Configure the backend
 
-Create the required environment files for the backend and frontend.
+Create a backend environment file using the variables required by your implementation.
 
-Example backend configuration:
+Example:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key
@@ -324,29 +492,27 @@ LANGFUSE_SECRET_KEY=your_langfuse_secret_key
 LANGFUSE_HOST=your_langfuse_host
 ```
 
-Example frontend configuration:
+### Configure the frontend
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-Do not commit real credentials or cloud service-account files.
+> Never commit real API keys, database credentials, or cloud service-account files.
 
-### Run with Docker Compose
+### Run the complete application
 
 ```bash
 docker compose up --build
 ```
 
-Services are exposed locally at:
-
-| Service | Address |
+| Service | Local address |
 |---|---|
 | Frontend | `http://localhost:3000` |
 | Backend | `http://localhost:8000` |
-| API documentation | `http://localhost:8000/docs` |
+| Swagger documentation | `http://localhost:8000/docs` |
 
-### Stop the application
+### Stop the services
 
 ```bash
 docker compose down
@@ -354,17 +520,16 @@ docker compose down
 
 ---
 
-## 💻 Run services separately
+## 💻 Run locally without Docker Compose
 
 ### Backend
 
 ```bash
 cd backend
-
 python -m venv .venv
 ```
 
-Activate the environment.
+Activate the virtual environment.
 
 macOS or Linux:
 
@@ -372,16 +537,21 @@ macOS or Linux:
 source .venv/bin/activate
 ```
 
-Windows:
+Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-Install dependencies and start the API:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Start the API:
+
+```bash
 uvicorn main:app --reload --port 8000
 ```
 
@@ -397,94 +567,119 @@ npm run dev
 
 ## 🧪 Testing
 
-Run backend tests with:
+Run the backend tests:
 
 ```bash
 cd backend
 pytest
 ```
 
-Useful test areas include:
+Recommended test scenarios:
 
-- eligible standard refunds
-- expired return windows
-- final-sale products
+- valid standard refund
+- expired return window
+- final-sale product
 - customer-caused damage
-- Black November restocking fees
-- high-value escalation
-- flagged-customer escalation
+- Black November restocking fee
+- flagged customer escalation
+- high-value refund escalation
 - missing order information
-- prompt-injection attempts
+- prompt injection
 - malformed model output
+- tool failure
+- retrieval failure
 
 ---
 
-## 📈 Observability
+## 🐳 Docker services
 
-The project is designed to trace agent execution using Langfuse and OpenTelemetry-compatible instrumentation.
+The root `docker-compose.yml` starts:
 
-Typical signals include:
+<table>
+<tr>
+<td width="50%" valign="top">
 
-- total request latency
-- model call duration
-- retrieval latency
-- tool-call success rate
-- token consumption
-- policy documents retrieved
-- guardrail failures
-- final decision distribution
-- escalation rate
+### Backend
 
-Observability is especially important in financial workflows because an apparently correct customer response may still be based on the wrong policy, tool result, or intermediate reasoning step.
+- built from `backend/Dockerfile`
+- exposed on port `8000`
+- FastAPI application
+- backend source mounted for development
+
+</td>
+<td width="50%" valign="top">
+
+### Frontend
+
+- built from `frontend/Dockerfile`
+- exposed on port `3000`
+- configured to call the backend service
+- starts after the backend dependency
+
+</td>
+</tr>
+</table>
 
 ---
 
-## ☁️ Deployment
+## ☁️ CI/CD and deployment
 
-The repository separates deployment-relevant code into:
+The deployment workflow runs on pushes to `main` only when files change inside:
 
 ```text
-backend/
-frontend/
-terraform/
+backend/**
+frontend/**
+terraform/**
 ```
 
-Its GitHub Actions deployment workflow is configured to run on pushes to `main` only when files inside one of those paths change.
+This means a root-level README-only change does not trigger the deployment pipeline.
 
-A README-only update does not trigger the automated deployment workflow.
-
-Infrastructure definitions under `terraform/` are intended to make cloud resources reproducible and version controlled.
+The infrastructure layer uses Terraform to keep cloud configuration reproducible and version controlled.
 
 ---
 
 ## 🔐 Security considerations
 
-This project demonstrates a safer pattern for agentic financial workflows:
+This project demonstrates safer patterns for AI-assisted financial workflows:
 
-- sensitive values are loaded from environment variables
-- financial decisions use structured schemas
-- high-risk cases are escalated
-- retrieved policy is used as grounding
-- model input and output are checked by guardrails
-- tool access is explicit
-- execution is observable
+- structured decisions instead of unrestricted text
+- policy-grounded retrieval
+- explicit tool access
+- input and output guardrails
+- automatic escalation for sensitive cases
+- session-scoped context
+- execution tracing
+- environment-based secret configuration
 
-For a real production deployment, additional controls would be required, including authentication, authorisation, audit logging, rate limiting, secret rotation, encrypted data storage, and human approval for sensitive transactions.
+A real production system would additionally require:
+
+- authentication and authorisation
+- audit logging
+- encrypted storage
+- secret rotation
+- rate limiting
+- fraud detection
+- role-based access control
+- human approval for financial transactions
+- data-retention policies
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Full-stack chat workflow
+- [x] Full-stack conversational interface
+- [x] FastAPI agent backend
 - [x] Structured refund decisions
-- [x] Policy retrieval
-- [x] Session-aware conversations
+- [x] Hybrid policy retrieval
+- [x] Persistent conversation sessions
 - [x] Input and output guardrails
 - [x] Docker Compose setup
-- [x] Agent observability foundation
+- [x] Agent tracing and observability
 - [x] Infrastructure-as-code structure
+- [ ] Human-review dashboard
+- [ ] Role-based access control
 - [ ] Expanded automated evaluation suite
-- [ ] Policy-version tracking
+- [ ] Policy versioning
 - [ ] Load and failure testing
 - [ ] Production security hardening
 
@@ -492,21 +687,29 @@ For a real production deployment, additional controls would be required, includi
 
 ## 👤 Author
 
-**Abhishek Gupta**
+<div align="center">
+
+### Abhishek Gupta
 
 <p>
   <a href="https://github.com/Manyfaces860">
-    <img src="https://img.shields.io/badge/GitHub-Manyfaces860-181717?style=flat-square&logo=github" alt="GitHub" />
+    <img src="https://img.shields.io/badge/GitHub-Manyfaces860-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
   </a>
   <a href="https://www.linkedin.com/in/abhishek-gupta-ab377b305/">
-    <img src="https://img.shields.io/badge/LinkedIn-Abhishek_Gupta-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" />
+    <img src="https://img.shields.io/badge/LinkedIn-Abhishek_Gupta-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
 </p>
+
+</div>
 
 ---
 
 <div align="center">
 
-### Built to explore safe, observable, and policy-grounded AI decision workflows.
+### Safe decisions. Grounded policies. Observable execution.
+
+<a href="https://drive.google.com/file/d/1IsBMHvM7bE1eF3cGJreJt_27cZf64qxC/view?usp=sharing">
+  <img src="https://img.shields.io/badge/Watch_the_Demo-4285F4?style=flat-square&logo=googledrive&logoColor=white" alt="Watch demo" />
+</a>
 
 </div>
